@@ -1,0 +1,11 @@
+# Ralph Progress Log
+Started: Wed, Nov 11, 2026  6:36:30 PM
+---
+## 2026-11-11 - US-001
+- Implementado carregar_vendas/carregar_lojas em pipeline.py (csv + Decimal); 423 vendas, 8 lojas.
+- Arquivos: pipeline.py, tests/test_dados.py
+- Verificação em navegador não foi feita (projeto sem UI nesta história).
+- **Learnings for future iterations:**
+  - Testes inserem a raiz no sys.path para importar pipeline.
+  - Branch ralph/csv-ao-grafico criada a partir da main.
+---
