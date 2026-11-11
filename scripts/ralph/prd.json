@@ -1,0 +1,98 @@
+{
+  "project": "ralph-lab",
+  "branchName": "ralph/csv-ao-grafico",
+  "description": "Do CSV ao gráfico: inner join de vendas e lojas, pivot de receita por região e mês, e página index.html com gráfico SVG e conclusão. Restrições: não apagar linhas problemáticas de vendas.csv nem de lojas.csv, não inventar dados, ler receita_brl como número (Decimal), usar só a biblioteca padrão do Python e o pytest, sem CDN nem dependências externas. O critério de pronto é a suíte pytest inteira verde (python -m pytest -q) com pelo menos 4 casos.",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Carregar os dados de origem",
+      "description": "Como analista, quero carregar vendas.csv e lojas.csv em estruturas Python para poder juntá-los sem perder precisão monetária.",
+      "acceptanceCriteria": [
+        "pipeline.py na raiz tem funções que leem vendas.csv e lojas.csv com o módulo csv, com receita_brl convertida para Decimal",
+        "Carrega 423 vendas e 8 lojas",
+        "vendas.csv e lojas.csv não são modificados",
+        "tests/test_dados.py tem pelo menos 2 testes (contagens e tipo numérico da receita)",
+        "python -m pytest -q passa"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-002",
+      "title": "Inner join em vendas_lojas.csv",
+      "description": "Como analista, quero o inner join de vendas e lojas por id_loja para saber a receita por região.",
+      "acceptanceCriteria": [
+        "python pipeline.py grava vendas_lojas.csv na raiz com cabeçalho e 420 linhas de dados",
+        "Mantém as colunas de vendas.csv, inclusive receita_brl com esse nome, e acrescenta nome_loja, regiao e uf",
+        "A soma de receita_brl é 931274.06",
+        "As 3 vendas com id_loja=999 não entram no arquivo e não são apagadas de vendas.csv",
+        "tests/test_join.py verifica as 420 linhas e a soma",
+        "python -m pytest -q passa"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-003",
+      "title": "Registrar as anomalias dos dados",
+      "description": "Como leitor do relatório, quero saber quem ficou de fora e por quê.",
+      "acceptanceCriteria": [
+        "python pipeline.py grava anomalias.md",
+        "Lista as 3 vendas órfãs (id_venda, data, id_loja, receita_brl) e o total de R$ 8.120,00",
+        "Informa que a loja 108 (Batel, Sul) não teve vendas e não aparece no pivot",
+        "Explica a consequência: a receita das órfãs não aparece em nenhuma região, e o Sul do relatório descreve uma operação menor do que a real",
+        "tests/test_anomalias.py confere 3 órfãs, total 8120.00 e a loja 108",
+        "python -m pytest -q passa"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-004",
+      "title": "Pivot de receita por região e mês",
+      "description": "Como analista, quero a receita por região e por mês para comparar o desempenho.",
+      "acceptanceCriteria": [
+        "python pipeline.py grava pivot_receita.csv com o cabeçalho exato regiao,2026-01,2026-02,2026-03,2026-04,2026-05,2026-06",
+        "4 linhas de dados, em ordem alfabética: Centro-Oeste, Nordeste, Sudeste, Sul",
+        "Valores com ponto decimal e 2 casas, por exemplo 265077.49, sem R$ e sem separador de milhar; célula sem venda vale 0.00",
+        "A soma de todas as células numéricas é 931274.06 (tolerância 0,50) e o total do Sudeste é 265077.49",
+        "tests/test_pivot.py verifica cabeçalho, forma 4x7, total e Sudeste",
+        "python -m pytest -q passa"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-005",
+      "title": "Página index.html com gráfico e conclusão",
+      "description": "Como leitor, quero ver a receita mensal por região em um gráfico e uma conclusão em texto.",
+      "acceptanceCriteria": [
+        "python pipeline.py grava index.html na raiz, autocontido: sem script src, sem CSS externo e sem CDN",
+        "Contém um elemento svg inline com a receita mensal por região, com legenda e eixos rotulados",
+        "Contém um parágrafo p de conclusão com pelo menos 300 caracteres, gerado a partir dos dados: região líder (Sudeste, R$ 265.077,49), receita total (R$ 931.274,06) e as duas anomalias (3 vendas órfãs de R$ 8.120,00 fora do relatório; loja 108 sem vendas)",
+        "tests/test_pagina.py verifica o svg, o parágrafo com 300+ caracteres e a menção ao Sudeste",
+        "python -m pytest -q passa"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-006",
+      "title": "Pipeline reproduzível e suíte final",
+      "description": "Como mantenedor, quero um único comando que regenere tudo e uma suíte que prove que está certo.",
+      "acceptanceCriteria": [
+        "python pipeline.py regenera vendas_lojas.csv, pivot_receita.csv, anomalias.md e index.html a partir de vendas.csv e lojas.csv sem erro, e rodar duas vezes dá o mesmo resultado",
+        "A suíte tem pelo menos 4 testes e python -m pytest -q passa com nenhum teste falhando",
+        "progress.txt registra o que foi feito em cada história"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}
