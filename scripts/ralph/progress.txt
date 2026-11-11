@@ -34,3 +34,11 @@ Started: Wed, Nov 11, 2026  6:36:30 PM
   - calcular_pivot devolve {regiao: {mes: Decimal}}; reutilizar para o gráfico SVG do index.html.
   - O mês vem de data[:7]; MESES é a constante com os 6 meses.
 ---
+## 2026-11-11 - US-005
+- Implementados gerar_svg (barras agrupadas por mês/região, eixos rotulados, legenda), gerar_conclusao (texto calculado dos dados), gerar_index_html e gravar_index em pipeline.py; main grava index.html autocontido.
+- Arquivos: pipeline.py, tests/test_pagina.py, index.html
+- Verificação em navegador não foi feita (sem navegador neste projeto); HTML conferido só por testes.
+- **Learnings for future iterations:**
+  - O index.html tem um único <p> (a conclusão); os testes dependem disso.
+  - main agora calcula o pivot uma vez e reutiliza para CSV e HTML.
+---
