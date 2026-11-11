@@ -9,3 +9,12 @@ Started: Wed, Nov 11, 2026  6:36:30 PM
   - Testes inserem a raiz no sys.path para importar pipeline.
   - Branch ralph/csv-ao-grafico criada a partir da main.
 ---
+## 2026-11-11 - US-002
+- Implementados juntar (inner join por id_loja), gravar_vendas_lojas e main em pipeline.py; vendas_lojas.csv com 420 linhas, soma 931274.06; as 3 órfãs (id_loja=999) ficam de fora sem alterar vendas.csv.
+- Arquivos: pipeline.py, tests/test_join.py, vendas_lojas.csv
+- Verificação em navegador não foi feita (sem UI nesta história).
+- **Learnings for future iterations:**
+  - id_loja é string em ambos os CSVs, então o join por string funciona.
+  - receita_brl é gravada com f"{x:.2f}" a partir do Decimal.
+  - Bash com heredoc/append foi negado; use Write/Edit para criar arquivos.
+---
