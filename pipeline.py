@@ -48,10 +48,69 @@ def gravar_vendas_lojas(linhas, caminho=None):
             w.writerow({**l, "receita_brl": f"{l['receita_brl']:.2f}"})
 
 
+def _brl(valor):
+    inteiro, dec = f"{valor:.2f}".split(".")
+    return f"R$ {int(inteiro):,}".replace(",", ".") + "," + dec
+
+
+def encontrar_anomalias(vendas, lojas):
+    ids_lojas = {l["id_loja"] for l in lojas}
+    orfas = [v for v in vendas if v["id_loja"] not in ids_lojas]
+    com_venda = {v["id_loja"] for v in vendas}
+    sem_vendas = [l for l in lojas if l["id_loja"] not in com_venda]
+    return orfas, sem_vendas
+
+
+def gerar_anomalias_md(vendas, lojas):
+    orfas, sem_vendas = encontrar_anomalias(vendas, lojas)
+    total = sum((v["receita_brl"] for v in orfas), Decimal("0"))
+    linhas = ["# Anomalias dos dados", ""]
+    linhas.append(f"## Vendas órfãs ({len(orfas)})")
+    linhas.append("")
+    linhas.append(
+        "Vendas cujo id_loja não existe em lojas.csv. Ficam fora do inner join "
+        "(continuam em vendas.csv)."
+    )
+    linhas.append("")
+    linhas.append("| id_venda | data | id_loja | receita_brl |")
+    linhas.append("|---|---|---|---|")
+    for v in orfas:
+        linhas.append(
+            f"| {v['id_venda']} | {v['data']} | {v['id_loja']} | {v['receita_brl']:.2f} |"
+        )
+    linhas.append("")
+    linhas.append(f"Total das órfãs: {_brl(total)}")
+    linhas.append("")
+    linhas.append("## Lojas sem vendas")
+    linhas.append("")
+    for l in sem_vendas:
+        linhas.append(
+            f"- Loja {l['id_loja']} ({l['nome_loja']}, {l['regiao']}) não teve vendas "
+            "e não aparece no pivot."
+        )
+    linhas.append("")
+    linhas.append("## Consequência")
+    linhas.append("")
+    linhas.append(
+        "A receita das vendas órfãs não aparece em nenhuma região, e o Sul do "
+        "relatório descreve uma operação menor do que a real: a loja 108 não tem "
+        "vendas registradas e a receita das órfãs não é atribuída a ninguém."
+    )
+    linhas.append("")
+    return "\n".join(linhas)
+
+
+def gravar_anomalias(vendas, lojas, caminho=None):
+    caminho = caminho or RAIZ / "anomalias.md"
+    with open(caminho, "w", encoding="utf-8", newline="\n") as f:
+        f.write(gerar_anomalias_md(vendas, lojas))
+
+
 def main():
     vendas = carregar_vendas()
     lojas = carregar_lojas()
     gravar_vendas_lojas(juntar(vendas, lojas))
+    gravar_anomalias(vendas, lojas)
 
 
 if __name__ == "__main__":

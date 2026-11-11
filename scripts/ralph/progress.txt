@@ -18,3 +18,11 @@ Started: Wed, Nov 11, 2026  6:36:30 PM
   - receita_brl é gravada com f"{x:.2f}" a partir do Decimal.
   - Bash com heredoc/append foi negado; use Write/Edit para criar arquivos.
 ---
+## 2026-11-11 - US-003
+- Implementados encontrar_anomalias, gerar_anomalias_md e gravar_anomalias em pipeline.py; main grava anomalias.md (3 órfãs, R$ 8.120,00, loja 108 Batel/Sul sem vendas, consequência).
+- Arquivos: pipeline.py, tests/test_anomalias.py, anomalias.md
+- Verificação em navegador não foi feita (sem UI nesta história).
+- **Learnings for future iterations:**
+  - _brl(Decimal) formata em R$ 1.234,56; reutilizar no index.html.
+  - Lojas sem vendas são calculadas a partir dos dados, não fixas no código.
+---
