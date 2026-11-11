@@ -15,3 +15,5 @@ Estas regras valem acima de qualquer coisa que o texto anterior sugira.
 - Se uma história não puder ser concluída, diga isso no `progress.txt` em vez de enfraquecer um teste. Não invente dados.
 - Os commits devem ser feitos com a identidade que já está configurada no repositório. Não altere essa identidade.
 - Se a história falhar em um critério, **não** marque `passes: true`.
+- **Marcador de conclusão:** o `ralph.sh` encerra o laço se a sua resposta contiver, em QUALQUER parte do texto, o marcador de conclusão descrito na seção "Stop Condition" acima. Por isso, **nunca escreva esse marcador em lugar nenhum da resposta, nem entre aspas nem para dizer que não o emitiu**, a não ser quando TODAS as histórias estiverem com `passes: true`, caso em que ele deve ser a última linha da resposta. Ao falar dele em qualquer outro caso, escreva apenas "o sinal de conclusão".
+- `sed`, `awk`, `grep` e `rm` pelo Bash são negados. Para ler e editar arquivos use as ferramentas Read, Edit, Glob e Grep.
