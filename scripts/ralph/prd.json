@@ -91,7 +91,7 @@
         "progress.txt registra o que foi feito em cada história"
       ],
       "priority": 6,
-      "passes": false,
+      "passes": true,
       "notes": ""
     }
   ]

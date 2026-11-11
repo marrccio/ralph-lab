@@ -42,3 +42,11 @@ Started: Wed, Nov 11, 2026  6:36:30 PM
   - O index.html tem um único <p> (a conclusão); os testes dependem disso.
   - main agora calcula o pivot uma vez e reutiliza para CSV e HTML.
 ---
+## 2026-11-11 - US-006
+- Verificado que python pipeline.py regenera vendas_lojas.csv, pivot_receita.csv, anomalias.md e index.html sem erro; duas execuções seguidas não alteram nenhum arquivo (git status limpo), ou seja, saída determinística.
+- Suíte: 11 testes, python -m pytest -q passa sem falhas.
+- Arquivos: scripts/ralph/prd.json, scripts/ralph/progress.txt (nenhuma mudança de código necessária).
+- Verificação em navegador não foi feita (sem navegador neste projeto).
+- **Learnings for future iterations:**
+  - Todas as histórias concluídas; a idempotência vem de não gravar timestamps nas saídas.
+---
