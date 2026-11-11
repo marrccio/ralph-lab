@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 scripts/ralph/.last-branch
 scripts/ralph/archive/
+.npmrc
