@@ -26,3 +26,11 @@ Started: Wed, Nov 11, 2026  6:36:30 PM
   - _brl(Decimal) formata em R$ 1.234,56; reutilizar no index.html.
   - Lojas sem vendas são calculadas a partir dos dados, não fixas no código.
 ---
+## 2026-11-11 - US-004
+- Implementados calcular_pivot e gravar_pivot em pipeline.py; main grava pivot_receita.csv (4 regiões x 6 meses, 2 casas, 0.00 sem venda); total 931274.06, Sudeste 265077.49.
+- Arquivos: pipeline.py, tests/test_pivot.py, pivot_receita.csv
+- Verificação em navegador não foi feita (sem UI nesta história).
+- **Learnings for future iterations:**
+  - calcular_pivot devolve {regiao: {mes: Decimal}}; reutilizar para o gráfico SVG do index.html.
+  - O mês vem de data[:7]; MESES é a constante com os 6 meses.
+---
