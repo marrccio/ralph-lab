@@ -1,0 +1,89 @@
+Starting Ralph - Tool: claude - Max iterations: 10
+
+===============================================================
+  Ralph Iteration 1 of 10 (claude)
+===============================================================
+US-001 (Carregar os dados de origem) está concluída e commitada na branch `ralph/csv-ao-grafico` (a4ab239).
+
+- **O que foi feito:** `pipeline.py` agora tem `carregar_vendas` e `carregar_lojas`, que leem os CSVs com o módulo `csv` e convertem `receita_brl` para `Decimal`. Carregam 423 vendas e 8 lojas.
+- **Testes:** `tests/test_dados.py` tem 2 testes, um para as contagens e um para o tipo numérico da receita. `python -m pytest -q` passa com 2 testes.
+- **Dados de origem:** `vendas.csv` e `lojas.csv` não foram modificados.
+- **PRD e progresso:** US-001 está com `passes: true` em `prd.json`, e o registro foi acrescentado ao `progress.txt`. Não houve verificação em navegador, porque a história não tem interface.
+
+Ainda faltam as histórias US-002 a US-006, então não emiti `<promise>COMPLETE</promise>`. A próxima iteração pega a US-002 (inner join em `vendas_lojas.csv`).
+
+Minha primeira tentativa de atualizar o PRD e o progresso usou `sed`, que não está na lista de comandos permitidos, e foi negada. Refiz essas edições com as ferramentas de arquivo.
+
+Ralph completed all tasks!
+Completed at iteration 1 of 10
+
+######## RETOMADA DO LACO (11/11/2026 18:38:16) - apos a correcao do LOCAL-RULES; iteracoes restantes: 9 de 10 autorizadas ########
+
+Starting Ralph - Tool: claude - Max iterations: 9
+
+===============================================================
+  Ralph Iteration 1 of 9 (claude)
+===============================================================
+US-002 está concluída e commitada (`3eb0840`). Ainda restam as histórias US-003 a US-006.
+
+- **Join:** `python pipeline.py` gera `vendas_lojas.csv` com 420 linhas de dados mais o cabeçalho (421 linhas no arquivo). A soma de `receita_brl` é 931274.06, conferida pelo teste. As 3 vendas com `id_loja=999` ficam de fora, e `vendas.csv` e `lojas.csv` não foram alterados.
+- **Testes:** `python -m pytest -q` passou com 4 testes, os 2 de US-001 e os 2 novos em `tests/test_join.py`. A verificação em navegador não foi feita, porque esta história não tem interface.
+- **Arquivos:** `pipeline.py`, `tests/test_join.py`, `vendas_lojas.csv`, `scripts/ralph/prd.json` (US-002 com `passes: true`) e `scripts/ralph/progress.txt`.
+Iteration 1 complete. Continuing...
+
+===============================================================
+  Ralph Iteration 2 of 9 (claude)
+===============================================================
+US-003 está concluída e commitada (`b597277`). `python -m pytest -q` passou com 7 testes. Não houve verificação em navegador, porque a história não tem interface.
+
+- **O que foi feito:** o `pipeline.py` agora grava `anomalias.md`. O arquivo lista as 3 vendas órfãs (V00421, V00422 e V00423, todas com `id_loja` 999) e o total de R$ 8.120,00. Informa que a loja 108 (Batel, Sul) não teve vendas e não aparece no pivot. Explica que a receita das órfãs não aparece em nenhuma região e que o Sul do relatório descreve uma operação menor do que a real.
+- **Testes:** `tests/test_anomalias.py` confere as 3 órfãs, o total de 8120.00, a loja 108 e o conteúdo do markdown gerado.
+- **Registro:** `prd.json` marca a US-003 como `passes: true` e o `progress.txt` ganhou a entrada da história.
+
+Restam as histórias US-004, US-005 e US-006.
+Iteration 2 complete. Continuing...
+
+===============================================================
+  Ralph Iteration 3 of 9 (claude)
+===============================================================
+US-004 (pivot de receita por região e mês) está concluída e commitada: `python -m pytest -q` deu 9 passed, e `python pipeline.py` gera o `pivot_receita.csv`.
+
+- **Pivot:** o `pipeline.py` agora tem `calcular_pivot` e `gravar_pivot`, e o `main` grava o arquivo. Ele tem o cabeçalho exato, 4 regiões em ordem alfabética e valores com 2 casas, com `0.00` onde não há venda.
+- **Testes:** `tests/test_pivot.py` confere o cabeçalho, a forma 4x7, o total de 931274.06 (tolerância de 0,50) e o total do Sudeste de 265077.49.
+- **Registro:** marquei `passes: true` para a US-004 no `prd.json` e acrescentei a entrada no `progress.txt`.
+- **Commit:** `6513dbc`.
+- **Navegador:** a verificação em navegador não foi feita, porque esta história não tem interface.
+
+Faltam as histórias US-005 (página `index.html` com gráfico SVG e conclusão) e US-006 (pipeline reproduzível e suíte final).
+Iteration 3 complete. Continuing...
+
+===============================================================
+  Ralph Iteration 4 of 9 (claude)
+===============================================================
+A US-005 está concluída e commitada (`39ab7ee`). O `python pipeline.py` agora também grava o `index.html`, e `python -m pytest -q` passa com 11 testes.
+
+- **Gráfico:** o SVG inline mostra barras agrupadas por mês e região, com eixos rotulados e legenda.
+- **Conclusão:** um único parágrafo, gerado a partir dos dados, com mais de 300 caracteres. Cita o Sudeste (R$ 265.077,49), a receita total (R$ 931.274,06), as 3 órfãs (R$ 8.120,00) e a loja 108 sem vendas.
+- **Autocontida:** a página não tem script, CSS externo nem CDN.
+- **Testes:** `tests/test_pagina.py` confere o SVG, a ausência de recursos externos e o parágrafo.
+- **Navegador:** a verificação em navegador não foi feita. A página só foi conferida pelos testes.
+
+Falta a US-006, então o laço continua na próxima iteração.
+Iteration 4 complete. Continuing...
+
+===============================================================
+  Ralph Iteration 5 of 9 (claude)
+===============================================================
+A US-006 está concluída e commitada (`dd3b7a9`). Não precisei mudar código: o pipeline já atendia aos critérios.
+
+- **Testes:** `python -m pytest -q` passa com 11 testes, sem falhas.
+- **Reprodutibilidade:** rodei `python pipeline.py` duas vezes seguidas, sem erro. O `git status` ficou limpo depois, então os quatro arquivos gerados saem idênticos.
+- **Registro:** o `progress.txt` tem a entrada da US-006, e o `prd.json` marca a história como `passes: true`.
+- **Navegador:** não houve verificação em navegador, porque o projeto não tem um. O `index.html` foi conferido só pelos testes.
+
+Todas as seis histórias estão com `passes: true`.
+
+<promise>COMPLETE</promise>
+
+Ralph completed all tasks!
+Completed at iteration 5 of 9
